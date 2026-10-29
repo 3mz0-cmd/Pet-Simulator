@@ -1,0 +1,6 @@
+name:Buddy
+hunger:20
+happiness:0
+energy:0
+level:1
+experience:10
