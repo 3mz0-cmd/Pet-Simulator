@@ -1,4 +1,4 @@
-pet_stats = {"name": "Buddy", "hunger": 0, "happiness": 0, "energy": 0 , "level": 1, "experience": 0}
+pet_stats = {"name": "Buddy", "hunger": 0, "happiness": 0, "energy": 0 , "level": 1, "experience": 40}
 
 def menu():
     print("Welcome to the Pet Simulator!")
@@ -45,10 +45,11 @@ def view_stats():
     print(f"Successfully viewed {pet_stats['name']}'s stats\n")
 
 def level_up():
-     if pet_stats["experience"] >= 50:
+     xp_needed = 50 + (pet_stats["level"]-1) * 15
+     if pet_stats["experience"] >= xp_needed:
           pet_stats["level"] += 1
           print (f"{pet_stats['name']} is now level {pet_stats['level']}")
-          pet_stats["experience"] -= 50
+          pet_stats["experience"] -= xp_needed
 
 def save_stats():
      with open ("pet_stats.txt" , "w") as file:
@@ -89,6 +90,8 @@ def main():
             print("Thanks for playing!")
             save_stats()
             break
+        else:
+            print("Invalid option!")
 
         level_up()
         save_stats()
