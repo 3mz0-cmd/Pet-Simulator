@@ -1,3 +1,1 @@
-pet food:0
-pet bed:1
-toy ball:0
+pet bed:True

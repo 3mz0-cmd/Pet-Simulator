@@ -1,7 +1,7 @@
 name:Buddy
-hunger:80
-happiness:90
-energy:70
-level:3
-experience:75
-coin:80
+hunger:100
+happiness:50
+energy:100
+level:1
+experience:0
+coin:0

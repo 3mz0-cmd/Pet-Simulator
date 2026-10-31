@@ -13,7 +13,7 @@ def menu():
 
 def feed_pet():
     if pet_stats["hunger"] < 100:
-        if inventory["pet food"] == 0:
+        if inventory.get("pet food" , 0) == 0:
             pet_stats["hunger"] = min(100, pet_stats['hunger']+10)
             pet_stats["experience"] += 5
             pet_stats["coin"] += 5
@@ -38,7 +38,7 @@ def play_with_pet():
     elif pet_stats["energy"] == 0:
              print(f"{pet_stats['name']} is too tired to play! Rest him!\n")
     else:
-        if inventory["toy ball"] == 0:
+        if inventory.get("toy ball" , 0) == 0:
             pet_stats["happiness"] = min(100, pet_stats["happiness"]+10)
             pet_stats["hunger"] = max(0, pet_stats["hunger"]-10)
             pet_stats["energy"] = max(0, pet_stats["energy"]-10)
@@ -59,7 +59,7 @@ def play_with_pet():
 
 def rest_pet():
     if pet_stats["energy"] < 100:
-        if inventory["pet bed"] == 0:
+        if inventory.get("pet bed" , False) == False:
             pet_stats["energy"] = min(100, pet_stats["energy"] + 10)
             pet_stats["experience"] += 5
             pet_stats["coin"] += 5
@@ -85,6 +85,10 @@ def view_inventory():
          print("Your inventory is empty!\n")
     else:
         for item, amount in inventory.items():
+            if item == "pet bed" and amount == True:
+                amount = "Bought permanent upgrade"
+            elif item == "pet bed" and amount == False:
+                amount = "Not purchased"
             print(f"{item.title()}: {amount}")
         print("Succesfully viewed your inventory!\n")
 
@@ -92,7 +96,7 @@ def shop():
     print("\nWelcome to the Shop!")
     print("1.Pet Food (Consumable: Restore 30 hunger|15 coins)")
     print("2.Toy Ball (Consumable: Restore 30 happiness|15 coins)")
-    print("3.Comfy Pet Bed (Permanent upgrade: Restore 20 energy|30 coins)")
+    print("3.Pet Bed (Permanent upgrade: Restore 20 energy|30 coins)")
     print(f"Your coins: {pet_stats['coin']}")
 
     shop_input = input("What would you like to buy?(1-3): ")
@@ -112,11 +116,11 @@ def shop():
             else:
                 print("You don't have enough coins!\n")
     elif shop_input == "3":
-            if inventory["pet bed"] == 1:
+            if inventory.get("pet bed" , False) == True:
                 print("You already bought a bed!\n")
             elif pet_stats["coin"] >= 30:
                 pet_stats["coin"] -= 30
-                inventory["pet bed"] = inventory.get("pet bed" , 0) + 1
+                inventory["pet bed"] = True
                 print("You bought a comfy pet bed for 30 coins!\n")
             else:
                 print("You don't have enough coins!\n")
@@ -164,10 +168,14 @@ def load_inventory():
                     parts = line.strip().split(":")
                     item = parts[0]
                     amount = parts[1]
-                    inventory[item] = int(amount)
+                    if item == "pet bed":
+                        inventory[item] = amount == True
+                    else:
+                        inventory[item] = int(amount)
     except FileNotFoundError:
-         pass
-
+        pass
+    except IndexError:
+        pass
 def main():
     load_stats()
     load_inventory()
